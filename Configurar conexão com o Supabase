@@ -10,8 +10,8 @@
 // arquivo no Netlify.
 // ============================================================
 
-export const SUPABASE_URL = 'COLE_AQUI_SUA_SUPABASE_URL';
-export const SUPABASE_ANON_KEY = 'COLE_AQUI_SUA_SUPABASE_ANON_KEY';
+export const SUPABASE_URL = 'https://uikisxdpbfmvyjlkojij.supabase.co';
+export const SUPABASE_ANON_KEY = 'sb_publishable_HpLfy1QH5OPC7DTQKLc9iA_4mHbtXml';
 
 export const STORAGE_BUCKET = 'documentos';
 
