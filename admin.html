@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Painel Administrativo | Craques da Superação</title>
+<link rel="icon" href="assets/logo.png" type="image/png">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- TELA DE LOGIN -->
+<div class="admin-login-page" id="loginPage">
+  <div class="admin-login-card">
+    <div class="logo"><img src="assets/logo.png" alt="Logo Craques da Superação" class="logo-badge"></div>
+    <h1>Painel Administrativo</h1>
+    <p class="sub">Craques da Superação — acesso restrito</p>
+
+    <div class="admin-error" id="loginError">Email ou senha inválidos.</div>
+
+    <form id="loginForm">
+      <div class="field">
+        <label>Email</label>
+        <input type="email" id="loginEmail" required autocomplete="username">
+      </div>
+      <div class="field">
+        <label>Senha</label>
+        <input type="password" id="loginPassword" required autocomplete="current-password">
+      </div>
+      <button type="submit" class="btn btn-primary btn-block" id="loginBtn">Entrar</button>
+    </form>
+  </div>
+</div>
+
+<!-- PAINEL (protegido) -->
+<div class="admin-shell" id="adminShell">
+  <aside class="admin-sidebar">
+    <div class="logo"><img src="assets/logo.png" alt="Logo Craques da Superação" class="logo-badge"><span class="text">Craques da Superação<small>Painel Admin</small></span></div>
+    <div class="admin-nav-item active"><span>📊</span><span class="text">Dashboard</span></div>
+    <button class="admin-nav-item logout-btn" id="logoutBtn" style="border:none;background:transparent;width:100%;text-align:left;"><span>🚪</span><span class="text">Sair</span></button>
+  </aside>
+
+  <main class="admin-main">
+    <div class="admin-topbar">
+      <h1>Dashboard de Inscrições</h1>
+      <span id="adminEmailLabel" style="color:var(--gray-500);font-size:0.88rem;"></span>
+    </div>
+
+    <div class="stat-grid">
+      <div class="admin-stat-card total">
+        <div class="num" id="statTotal">0</div>
+        <div class="label">Total de inscrições</div>
+      </div>
+      <div class="admin-stat-card pendente">
+        <div class="num" id="statPendentes">0</div>
+        <div class="label">Pendentes</div>
+      </div>
+      <div class="admin-stat-card aprovada">
+        <div class="num" id="statAprovadas">0</div>
+        <div class="label">Aprovadas</div>
+      </div>
+      <div class="admin-stat-card reprovada">
+        <div class="num" id="statReprovadas">0</div>
+        <div class="label">Reprovadas</div>
+      </div>
+    </div>
+
+    <div class="search-bar">
+      <input type="text" id="searchInput" placeholder="Pesquisar por nome, CPF ou protocolo...">
+      <select id="statusFilter">
+        <option value="">Todos os status</option>
+        <option value="recebida">Recebida</option>
+        <option value="em_analise">Em análise</option>
+        <option value="aprovada">Aprovada</option>
+        <option value="reprovada">Reprovada</option>
+      </select>
+      <button class="btn btn-secondary" id="refreshBtn">↻ Atualizar</button>
+    </div>
+
+    <div class="admin-table-wrap">
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>Protocolo</th>
+            <th>Nome do participante</th>
+            <th>CPF</th>
+            <th>Data de envio</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody">
+          <tr><td colspan="5"><div class="empty-state">Carregando inscrições...</div></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+</div>
+
+<!-- MODAL DE DETALHES -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal-card" id="modalCard">
+    <!-- preenchido via JS -->
+  </div>
+</div>
+
+<div id="toastRoot"></div>
+
+<script src="js/admin.js" type="module"></script>
+</body>
+</html>

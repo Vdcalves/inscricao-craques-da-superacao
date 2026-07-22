@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ficha de Cadastro | Craques da Superação</title>
+<link rel="icon" href="assets/logo.png" type="image/png">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body class="form-page">
+
+<header class="form-header">
+  <div class="container">
+    <a href="index.html" class="logo">
+      <img src="assets/logo.png" alt="Logo Craques da Superação" class="logo-badge">
+      <span>Craques da Superação<small>Centro de Formação</small></span>
+    </a>
+    <a href="index.html" class="btn btn-secondary">← Voltar ao início</a>
+  </div>
+</header>
+
+<div class="form-hero">
+  <div class="container">
+    <h1>Ficha de Cadastro</h1>
+    <p>Preencha todos os dados com atenção. Os campos marcados com <strong style="color:var(--green-500);">*</strong> são obrigatórios.</p>
+  </div>
+</div>
+
+<!-- Barra de progresso -->
+<div class="progress-wrap">
+  <div class="progress-track">
+    <div class="progress-line"><div class="progress-line-fill" id="progressFill"></div></div>
+    <div class="progress-dot active" data-step="1"><span>1</span></div>
+    <div class="progress-dot" data-step="2"><span>2</span></div>
+    <div class="progress-dot" data-step="3"><span>3</span></div>
+    <div class="progress-dot" data-step="4"><span>4</span></div>
+    <div class="progress-dot" data-step="5"><span>5</span></div>
+    <div class="progress-dot" data-step="6"><span>6</span></div>
+  </div>
+</div>
+
+<div class="form-container">
+  <form id="inscricaoForm" novalidate>
+
+    <!-- ETAPA 1: Dados do participante -->
+    <div class="form-card step" data-step="1">
+      <span class="step-eyebrow">Etapa 1 de 6</span>
+      <h2>Dados do Participante</h2>
+      <p class="step-desc">Informe os dados pessoais da criança ou jovem que será inscrito.</p>
+
+      <div class="field">
+        <label>Foto do aluno <span class="required">*</span></label>
+        <div class="photo-upload">
+          <div class="photo-preview" id="photoPreview">📷</div>
+          <div style="flex:1;">
+            <input type="file" id="fotoAluno" accept="image/jpeg,image/png,image/jpg" style="display:none;">
+            <button type="button" class="btn btn-secondary" id="fotoAlunoBtn">Escolher foto</button>
+            <p class="hint">JPG ou PNG, até 10MB.</p>
+          </div>
+        </div>
+        <div class="error-msg">Envie uma foto do aluno.</div>
+      </div>
+
+      <div class="field">
+        <label>Nome completo <span class="required">*</span></label>
+        <input type="text" name="nome_completo" required>
+        <div class="error-msg">Informe o nome completo.</div>
+      </div>
+
+      <div class="row-2">
+        <div class="field">
+          <label>Data de nascimento <span class="required">*</span></label>
+          <input type="date" name="data_nascimento" required>
+          <div class="error-msg">Informe a data de nascimento.</div>
+        </div>
+        <div class="field">
+          <label>Sexo <span class="required">*</span></label>
+          <div class="radio-group" data-radio-name="sexo">
+            <label class="radio-pill"><input type="radio" name="sexo" value="Masculino" required>Masculino</label>
+            <label class="radio-pill"><input type="radio" name="sexo" value="Feminino">Feminino</label>
+          </div>
+          <div class="error-msg">Selecione o sexo.</div>
+        </div>
+      </div>
+
+      <div class="row-2">
+        <div class="field">
+          <label>CPF <span class="required">*</span></label>
+          <input type="text" name="cpf" placeholder="000.000.000-00" maxlength="14" required>
+          <div class="error-msg">Informe um CPF válido.</div>
+        </div>
+        <div class="field">
+          <label>RG <span class="required">*</span></label>
+          <input type="text" name="rg" required>
+          <div class="error-msg">Informe o RG.</div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Número da certidão de nascimento <span class="required">*</span></label>
+        <input type="text" name="certidao_nascimento_numero" required>
+        <div class="error-msg">Informe o número da certidão.</div>
+      </div>
+
+      <div class="row-2">
+        <div class="field">
+          <label>Escola <span class="required">*</span></label>
+          <input type="text" name="escola" required>
+          <div class="error-msg">Informe a escola.</div>
+        </div>
+        <div class="field">
+          <label>Série <span class="required">*</span></label>
+          <input type="text" name="serie" required>
+          <div class="error-msg">Informe a série.</div>
+        </div>
+      </div>
+
+      <div class="form-nav">
+        <span></span>
+        <button type="button" class="btn btn-primary" data-next>Próximo →</button>
+      </div>
+    </div>
+
+    <!-- ETAPA 2: Filiação e responsável -->
+    <div class="form-card step" data-step="2" hidden>
+      <span class="step-eyebrow">Etapa 2 de 6</span>
+      <h2>Filiação e Responsável</h2>
+      <p class="step-desc">Dados dos pais ou responsáveis legais pelo participante.</p>
+
+      <div class="row-2">
+        <div class="field">
+          <label>Nome da mãe</label>
+          <input type="text" name="nome_mae">
+        </div>
+        <div class="field">
+          <label>Nome do pai</label>
+          <input type="text" name="nome_pai">
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Responsável legal <span class="required">*</span></label>
+        <input type="text" name="responsavel_legal" required>
+        <div class="error-msg">Informe o nome do responsável legal.</div>
+      </div>
+
+      <div class="field">
+        <label>CPF do responsável <span class="required">*</span></label>
+        <input type="text" name="cpf_responsavel" placeholder="000.000.000-00" maxlength="14" required>
+        <div class="error-msg">Informe um CPF válido.</div>
+      </div>
+
+      <div class="row-2">
+        <div class="field">
+          <label>Telefone <span class="required">*</span></label>
+          <input type="tel" name="telefone" placeholder="(00) 00000-0000" maxlength="15" required>
+          <div class="error-msg">Informe o telefone.</div>
+        </div>
+        <div class="field">
+          <label>WhatsApp <span class="required">*</span></label>
+          <input type="tel" name="whatsapp" placeholder="(00) 00000-0000" maxlength="15" required>
+          <div class="error-msg">Informe o WhatsApp.</div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Email <span class="required">*</span></label>
+        <input type="email" name="email" required>
+        <div class="error-msg">Informe um email válido.</div>
+      </div>
+
+      <div class="form-nav">
+        <button type="button" class="btn btn-secondary" data-prev>← Voltar</button>
+        <button type="button" class="btn btn-primary" data-next>Próximo →</button>
+      </div>
+    </div>
+
+    <!-- ETAPA 3: Endereço -->
+    <div class="form-card step" data-step="3" hidden>
+      <span class="step-eyebrow">Etapa 3 de 6</span>
+      <h2>Endereço</h2>
+      <p class="step-desc">Onde o participante reside atualmente.</p>
+
+      <div class="row-2">
+        <div class="field">
+          <label>CEP <span class="required">*</span></label>
+          <input type="text" name="cep" placeholder="00000-000" maxlength="9" required>
+          <div class="error-msg">Informe um CEP válido.</div>
+        </div>
+        <div class="field">
+          <label>Endereço (rua, número, bairro) <span class="required">*</span></label>
+          <input type="text" name="endereco" required>
+          <div class="error-msg">Informe o endereço.</div>
+        </div>
+      </div>
+
+      <div class="row-2">
+        <div class="field">
+          <label>Cidade <span class="required">*</span></label>
+          <input type="text" name="cidade" required>
+          <div class="error-msg">Informe a cidade.</div>
+        </div>
+        <div class="field">
+          <label>Estado <span class="required">*</span></label>
+          <select name="estado" required>
+            <option value="">Selecione...</option>
+            <option>AC</option><option>AL</option><option>AP</option><option>AM</option><option>BA</option>
+            <option>CE</option><option>DF</option><option>ES</option><option>GO</option><option>MA</option>
+            <option>MT</option><option>MS</option><option>MG</option><option>PA</option><option>PB</option>
+            <option>PR</option><option>PE</option><option>PI</option><option>RJ</option><option>RN</option>
+            <option>RS</option><option>RO</option><option>RR</option><option>SC</option><option>SP</option>
+            <option>SE</option><option>TO</option>
+          </select>
+          <div class="error-msg">Selecione o estado.</div>
+        </div>
+      </div>
+
+      <div class="form-nav">
+        <button type="button" class="btn btn-secondary" data-prev>← Voltar</button>
+        <button type="button" class="btn btn-primary" data-next>Próximo →</button>
+      </div>
+    </div>
+
+    <!-- ETAPA 4: Saúde -->
+    <div class="form-card step" data-step="4" hidden>
+      <span class="step-eyebrow">Etapa 4 de 6</span>
+      <h2>Informações de Saúde</h2>
+      <p class="step-desc">Essas informações nos ajudam a cuidar melhor do participante durante as atividades.</p>
+
+      <div class="field">
+        <label>Necessidade especial</label>
+        <textarea name="necessidade_especial" placeholder="Descreva, se houver. Caso não haja, escreva 'Nenhuma'."></textarea>
+      </div>
+      <div class="field">
+        <label>Alergias</label>
+        <textarea name="alergias" placeholder="Descreva, se houver. Caso não haja, escreva 'Nenhuma'."></textarea>
+      </div>
+      <div class="field">
+        <label>Medicamentos de uso contínuo</label>
+        <textarea name="medicamentos" placeholder="Descreva, se houver. Caso não haja, escreva 'Nenhum'."></textarea>
+      </div>
+      <div class="field">
+        <label>Observações gerais</label>
+        <textarea name="observacoes" placeholder="Alguma informação adicional que devemos saber?"></textarea>
+      </div>
+
+      <div class="form-nav">
+        <button type="button" class="btn btn-secondary" data-prev>← Voltar</button>
+        <button type="button" class="btn btn-primary" data-next>Próximo →</button>
+      </div>
+    </div>
+
+    <!-- ETAPA 5: Upload de documentos -->
+    <div class="form-card step" data-step="5" hidden>
+      <span class="step-eyebrow">Etapa 5 de 6</span>
+      <h2>Upload de Documentos</h2>
+      <p class="step-desc">Envie os documentos abaixo em PDF, JPG ou PNG (até 10MB cada). Todos são obrigatórios.</p>
+
+      <div class="doc-grid" id="docGrid"></div>
+
+      <div class="form-nav">
+        <button type="button" class="btn btn-secondary" data-prev>← Voltar</button>
+        <button type="button" class="btn btn-primary" data-next>Próximo →</button>
+      </div>
+    </div>
+
+    <!-- ETAPA 6: Declaração e envio -->
+    <div class="form-card step" data-step="6" hidden>
+      <span class="step-eyebrow">Etapa 6 de 6</span>
+      <h2>Declaração e Envio</h2>
+      <p class="step-desc">Revise os dados nas etapas anteriores antes de enviar. Após o envio, você receberá um número de protocolo.</p>
+
+      <div class="declaracao-box">
+        <input type="checkbox" id="declaracao" required>
+        <label for="declaracao">Declaro que todas as informações são verdadeiras e concordo com as normas do Projeto Craques da Superação.</label>
+      </div>
+      <div class="error-msg" id="declaracaoError" style="margin-top:8px;">Você precisa aceitar a declaração para continuar.</div>
+
+      <div class="form-nav" style="margin-top:28px;">
+        <button type="button" class="btn btn-secondary" data-prev>← Voltar</button>
+        <button type="submit" class="btn btn-primary btn-lg" id="submitBtn">ENVIAR INSCRIÇÃO</button>
+      </div>
+    </div>
+
+  </form>
+
+  <!-- Tela de sucesso -->
+  <div class="success-screen" id="successScreen" hidden>
+    <div class="success-icon">✓</div>
+    <h2>Inscrição realizada com sucesso!</h2>
+    <p style="color:var(--gray-600);">Guarde o número abaixo — ele será usado para acompanhar o andamento da sua inscrição.</p>
+    <div class="protocolo-box">
+      <div class="label">Seu protocolo é:</div>
+      <div class="value" id="protocoloValue">CDS-2026-000001</div>
+    </div>
+    <a href="index.html" class="btn btn-primary">Voltar ao início</a>
+  </div>
+</div>
+
+<!-- Overlay de progresso de envio -->
+<div class="upload-progress-overlay" id="uploadOverlay" hidden>
+  <div class="upload-progress-card">
+    <span class="ball">⚽</span>
+    <h3>Enviando sua inscrição...</h3>
+    <p style="color:var(--gray-600);font-size:0.9rem;" id="uploadStatusText">Preparando arquivos</p>
+    <div class="progress-bar-outer"><div class="progress-bar-inner" id="uploadBarInner"></div></div>
+    <span class="pct" id="uploadPct">0%</span>
+  </div>
+</div>
+
+<div id="toastRoot"></div>
+
+<script src="js/inscricao.js" type="module"></script>
+</body>
+</html>
