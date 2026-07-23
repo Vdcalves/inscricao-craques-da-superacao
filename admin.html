@@ -49,7 +49,7 @@
 
     <!-- VIEW: DASHBOARD -->
     <div id="viewDashboard">
-    <div class="stat-grid">
+    <div class="stat-grid stat-grid-5">
       <div class="admin-stat-card total">
         <div class="num" id="statTotal">0</div>
         <div class="label">Total de inscrições</div>
@@ -61,6 +61,10 @@
       <div class="admin-stat-card aprovada">
         <div class="num" id="statAprovadas">0</div>
         <div class="label">Aprovadas</div>
+      </div>
+      <div class="admin-stat-card reserva">
+        <div class="num" id="statReserva">0</div>
+        <div class="label">Reserva</div>
       </div>
       <div class="admin-stat-card reprovada">
         <div class="num" id="statReprovadas">0</div>
@@ -75,6 +79,7 @@
         <option value="recebida">Recebida</option>
         <option value="em_analise">Em análise</option>
         <option value="aprovada">Aprovada</option>
+        <option value="reserva">Reserva</option>
         <option value="reprovada">Reprovada</option>
       </select>
       <button class="btn btn-secondary" id="refreshBtn">↻ Atualizar</button>
