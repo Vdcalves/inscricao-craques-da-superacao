@@ -18,6 +18,11 @@ const DOCUMENTOS = [
 
 let allInscricoes = [];
 
+// Apenas este email pode ver e editar as Configurações do Site.
+// (A restrição de verdade está garantida pelas políticas RLS no Supabase —
+// isso aqui é só para não mostrar o menu para quem não tem permissão.)
+const EMAIL_AUTORIZADO_CONFIG = 'valdemirdcalves86@gmail.com';
+
 const loginPage = document.getElementById('loginPage');
 const adminShell = document.getElementById('adminShell');
 
@@ -42,6 +47,11 @@ function showDashboard(session) {
   loginPage.style.display = 'none';
   adminShell.classList.add('active');
   document.getElementById('adminEmailLabel').textContent = session.user.email;
+
+  if (session.user.email === EMAIL_AUTORIZADO_CONFIG) {
+    document.getElementById('navSiteConfig').hidden = false;
+  }
+
   carregarDados();
 }
 
@@ -298,6 +308,73 @@ async function salvarObservacoes(id) {
   showToast('Observações salvas!', 'success');
   await carregarDados();
 }
+
+// ----------------------------------------------------------------------------
+// Navegação entre "Dashboard" e "Configurações do Site"
+// ----------------------------------------------------------------------------
+const navDashboard = document.getElementById('navDashboard');
+const navSiteConfig = document.getElementById('navSiteConfig');
+const viewDashboard = document.getElementById('viewDashboard');
+const viewSiteConfig = document.getElementById('viewSiteConfig');
+const pageTitle = document.getElementById('pageTitle');
+
+navDashboard.addEventListener('click', () => {
+  navDashboard.classList.add('active');
+  navSiteConfig.classList.remove('active');
+  viewDashboard.hidden = false;
+  viewSiteConfig.hidden = true;
+  pageTitle.textContent = 'Dashboard de Inscrições';
+});
+
+navSiteConfig.addEventListener('click', () => {
+  navSiteConfig.classList.add('active');
+  navDashboard.classList.remove('active');
+  viewDashboard.hidden = true;
+  viewSiteConfig.hidden = false;
+  pageTitle.textContent = 'Configurações do Site';
+  carregarConfigForm();
+});
+
+// ----------------------------------------------------------------------------
+// Configurações do Site — carregar e salvar
+// ----------------------------------------------------------------------------
+const siteConfigForm = document.getElementById('siteConfigForm');
+let configCarregada = false;
+
+async function carregarConfigForm() {
+  if (configCarregada) return; // evita recarregar toda vez que troca de aba
+  const { data, error } = await supabase.from('site_config').select('key, value');
+  if (error) {
+    showToast('Erro ao carregar configurações: ' + error.message, 'error');
+    return;
+  }
+  data.forEach((row) => {
+    const field = siteConfigForm.querySelector(`[name="${row.key}"]`);
+    if (field) field.value = row.value;
+  });
+  configCarregada = true;
+}
+
+siteConfigForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const saveBtn = document.getElementById('saveConfigBtn');
+  saveBtn.disabled = true;
+  saveBtn.innerHTML = '<span class="loader"></span>';
+
+  const formData = new FormData(siteConfigForm);
+  const updates = Array.from(formData.entries()).map(([key, value]) => ({ key, value }));
+
+  const { error } = await supabase.from('site_config').upsert(updates, { onConflict: 'key' });
+
+  saveBtn.disabled = false;
+  saveBtn.textContent = 'Salvar alterações';
+
+  if (error) {
+    showToast('Erro ao salvar: ' + error.message, 'error');
+    return;
+  }
+  showToast('Site atualizado com sucesso! As mudanças já estão no ar.', 'success');
+});
 
 // ----------------------------------------------------------------------------
 // Toast simples
