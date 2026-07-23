@@ -598,6 +598,7 @@ p { line-height: 1.6; }
   background: var(--white); border-radius: var(--radius-lg);
   padding: 40px; width: 90%; max-width: 420px; text-align: center;
 }
+.upload-progress-overlay[hidden] { display: none !important; }
 .upload-progress-card .ball {
   font-size: 2.4rem; display: inline-block; margin-bottom: 14px;
   animation: roll 1s linear infinite;
