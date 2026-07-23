@@ -121,6 +121,7 @@ function atualizarEstatisticas() {
   document.getElementById('statTotal').textContent = allInscricoes.length;
   document.getElementById('statPendentes').textContent = allInscricoes.filter((i) => i.status === 'recebida').length;
   document.getElementById('statAprovadas').textContent = allInscricoes.filter((i) => i.status === 'aprovada').length;
+  document.getElementById('statReserva').textContent = allInscricoes.filter((i) => i.status === 'reserva').length;
   document.getElementById('statReprovadas').textContent = allInscricoes.filter((i) => i.status === 'reprovada').length;
 }
 
@@ -281,6 +282,7 @@ function renderModalConteudo(i) {
         <button class="status-btn ${i.status === 'recebida' ? 'active-recebida' : ''}" data-status="recebida">Recebida</button>
         <button class="status-btn ${i.status === 'em_analise' ? 'active-em_analise' : ''}" data-status="em_analise">Em análise</button>
         <button class="status-btn ${i.status === 'aprovada' ? 'active-aprovada' : ''}" data-status="aprovada">Aprovada</button>
+        <button class="status-btn ${i.status === 'reserva' ? 'active-reserva' : ''}" data-status="reserva">Reserva</button>
         <button class="status-btn ${i.status === 'reprovada' ? 'active-reprovada' : ''}" data-status="reprovada">Reprovada</button>
       </div>
     </div>

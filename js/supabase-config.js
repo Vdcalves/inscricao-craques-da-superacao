@@ -93,6 +93,7 @@ export const STATUS_LABELS = {
   recebida: 'Recebida',
   em_analise: 'Em análise',
   aprovada: 'Aprovada',
+  reserva: 'Reserva',
   reprovada: 'Reprovada',
 };
 
@@ -100,5 +101,6 @@ export const STATUS_COLORS = {
   recebida: 'status-recebida',
   em_analise: 'status-analise',
   aprovada: 'status-aprovada',
+  reserva: 'status-reserva',
   reprovada: 'status-reprovada',
 };
