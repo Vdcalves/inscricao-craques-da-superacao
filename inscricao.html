@@ -36,6 +36,7 @@
     <div class="progress-dot" data-step="4"><span>4</span></div>
     <div class="progress-dot" data-step="5"><span>5</span></div>
     <div class="progress-dot" data-step="6"><span>6</span></div>
+    <div class="progress-dot" data-step="7"><span>7</span></div>
   </div>
 </div>
 
@@ -250,9 +251,39 @@
       </div>
     </div>
 
-    <!-- ETAPA 5: Upload de documentos -->
+    <!-- ETAPA 5: Uniformes -->
     <div class="form-card step" data-step="5" hidden>
-      <span class="step-eyebrow">Etapa 5 de 6</span>
+      <span class="step-eyebrow">Etapa 5 de 7</span>
+      <h2>Uniformes</h2>
+      <p class="step-desc">Informe o tamanho/numeração de cada item para providenciarmos o uniforme do participante.</p>
+
+      <div class="row-3">
+        <div class="field">
+          <label>Camisa (tamanho) <span class="required">*</span></label>
+          <input type="text" name="uniforme_camisa" placeholder="Ex: P, M, G, 10, 12..." required>
+          <div class="error-msg">Informe o tamanho da camisa.</div>
+        </div>
+        <div class="field">
+          <label>Calção (tamanho) <span class="required">*</span></label>
+          <input type="text" name="uniforme_calcao" placeholder="Ex: P, M, G, 10, 12..." required>
+          <div class="error-msg">Informe o tamanho do calção.</div>
+        </div>
+        <div class="field">
+          <label>Calçado (numeração) <span class="required">*</span></label>
+          <input type="text" name="uniforme_calcado" placeholder="Ex: 34, 35, 36..." required>
+          <div class="error-msg">Informe a numeração do calçado.</div>
+        </div>
+      </div>
+
+      <div class="form-nav">
+        <button type="button" class="btn btn-secondary" data-prev>← Voltar</button>
+        <button type="button" class="btn btn-primary" data-next>Próximo →</button>
+      </div>
+    </div>
+
+    <!-- ETAPA 6: Upload de documentos -->
+    <div class="form-card step" data-step="6" hidden>
+      <span class="step-eyebrow">Etapa 6 de 7</span>
       <h2>Upload de Documentos</h2>
       <p class="step-desc">Envie os documentos abaixo em PDF, JPG ou PNG (até 10MB cada). Todos são obrigatórios.</p>
 
@@ -264,9 +295,9 @@
       </div>
     </div>
 
-    <!-- ETAPA 6: Declaração e envio -->
-    <div class="form-card step" data-step="6" hidden>
-      <span class="step-eyebrow">Etapa 6 de 6</span>
+    <!-- ETAPA 7: Declaração e envio -->
+    <div class="form-card step" data-step="7" hidden>
+      <span class="step-eyebrow">Etapa 7 de 7</span>
       <h2>Declaração e Envio</h2>
       <p class="step-desc">Revise os dados nas etapas anteriores antes de enviar. Após o envio, você receberá um número de protocolo.</p>
 
