@@ -6,11 +6,11 @@ const DOCUMENTOS = [
   { key: 'doc_cpf_participante', label: 'CPF do participante' },
   { key: 'doc_rg_responsavel', label: 'RG do responsável' },
   { key: 'doc_cpf_responsavel', label: 'CPF do responsável' },
-  { key: 'doc_certidao_nascimento', label: 'Certidão de nascimento' },
   { key: 'doc_comprovante_residencia', label: 'Comprovante de residência' },
   { key: 'doc_boletim_escolar', label: 'Boletim escolar' },
   { key: 'doc_exame_cardiologico', label: 'Exame cardiológico' },
   { key: 'doc_atestado_cardiologista', label: 'Atestado do cardiologista' },
+  { key: 'doc_atestado_aptidao', label: 'Atestado médico de aptidão física' },
   { key: 'doc_exame_sangue', label: 'Exame de sangue' },
   { key: 'doc_carta_assinada', label: 'Carta assinada' },
   { key: 'doc_foto_3x4', label: 'Foto 3x4' },
@@ -269,6 +269,15 @@ function renderModalConteudo(i) {
         <div class="detail-item"><div class="label">Medicamentos</div><div class="value">${i.medicamentos || 'Nenhum'}</div></div>
       </div>
       ${i.observacoes ? `<div class="detail-item" style="margin-top:12px;"><div class="label">Observações</div><div class="value">${i.observacoes}</div></div>` : ''}
+    </div>
+
+    <div class="detail-section">
+      <h4>Uniformes</h4>
+      <div class="detail-grid">
+        <div class="detail-item"><div class="label">Camisa</div><div class="value">${i.uniforme_camisa || '-'}</div></div>
+        <div class="detail-item"><div class="label">Calção</div><div class="value">${i.uniforme_calcao || '-'}</div></div>
+        <div class="detail-item"><div class="label">Calçado</div><div class="value">${i.uniforme_calcado || '-'}</div></div>
+      </div>
     </div>
 
     <div class="detail-section">

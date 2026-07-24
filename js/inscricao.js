@@ -8,11 +8,11 @@ const DOCUMENTOS = [
   { key: 'doc_cpf_participante', label: 'CPF do participante', icon: '🪪' },
   { key: 'doc_rg_responsavel', label: 'RG do responsável', icon: '🪪' },
   { key: 'doc_cpf_responsavel', label: 'CPF do responsável', icon: '🪪' },
-  { key: 'doc_certidao_nascimento', label: 'Certidão de nascimento', icon: '📄' },
   { key: 'doc_comprovante_residencia', label: 'Comprovante de residência', icon: '🏠' },
   { key: 'doc_boletim_escolar', label: 'Boletim escolar', icon: '📚' },
   { key: 'doc_exame_cardiologico', label: 'Exame cardiológico', icon: '🫀' },
   { key: 'doc_atestado_cardiologista', label: 'Atestado do cardiologista', icon: '🩺' },
+  { key: 'doc_atestado_aptidao', label: 'Atestado médico de aptidão física', icon: '📋' },
   { key: 'doc_exame_sangue', label: 'Exame de sangue', icon: '🩸' },
   { key: 'doc_carta_assinada', label: 'Carta assinada', icon: '✍️' },
   { key: 'doc_foto_3x4', label: 'Foto 3x4', icon: '📷' },
@@ -20,7 +20,7 @@ const DOCUMENTOS = [
 
 const state = {
   currentStep: 1,
-  totalSteps: 6,
+  totalSteps: 7,
   fotoAlunoFile: null,
   documentos: {}, // key -> File
 };
@@ -177,7 +177,7 @@ function validateStep(step) {
     }
   }
 
-  if (step === 5) {
+  if (step === 6) {
     DOCUMENTOS.forEach((doc) => {
       const card = docGrid.querySelector(`.doc-upload[data-key="${doc.key}"]`);
       const ok = !!state.documentos[doc.key];
@@ -187,13 +187,13 @@ function validateStep(step) {
     if (!valid) showToast('Envie todos os documentos obrigatórios.', 'error');
   }
 
-  if (step === 6) {
+  if (step === 7) {
     const decl = document.getElementById('declaracao');
     document.getElementById('declaracaoError').style.display = decl.checked ? 'none' : 'block';
     if (!decl.checked) valid = false;
   }
 
-  if (!valid && step !== 5) showToast('Preencha todos os campos obrigatórios.', 'error');
+  if (!valid && step !== 6) showToast('Preencha todos os campos obrigatórios.', 'error');
   return valid;
 }
 
@@ -287,6 +287,9 @@ form.addEventListener('submit', async (e) => {
       alergias: formData.get('alergias') || null,
       medicamentos: formData.get('medicamentos') || null,
       observacoes: formData.get('observacoes') || null,
+      uniforme_camisa: formData.get('uniforme_camisa'),
+      uniforme_calcao: formData.get('uniforme_calcao'),
+      uniforme_calcado: formData.get('uniforme_calcado'),
       declaracao_aceita: document.getElementById('declaracao').checked,
       foto_aluno_path: fotoAlunoPath,
       ...documentPaths,
