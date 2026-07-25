@@ -141,6 +141,12 @@ p { line-height: 1.6; }
   border: 2px solid rgba(255,255,255,0.5);
 }
 .btn-outline-light:hover { background: rgba(255,255,255,0.12); }
+.btn-danger {
+  background: var(--white);
+  color: var(--danger);
+  border: 2px solid var(--danger-bg);
+}
+.btn-danger:hover { background: var(--danger-bg); border-color: var(--danger); }
 .btn-block { width: 100%; }
 .btn:disabled { opacity: 0.55; cursor: not-allowed; transform: none !important; }
 .btn-lg { padding: 20px 40px; font-size: 1.1rem; }
