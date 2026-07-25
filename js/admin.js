@@ -17,6 +17,7 @@ const DOCUMENTOS = [
 ];
 
 let allInscricoes = [];
+let currentAdminEmail = null;
 
 // Apenas este email pode ver e editar as Configurações do Site.
 // (A restrição de verdade está garantida pelas políticas RLS no Supabase —
@@ -46,6 +47,7 @@ function showLogin() {
 function showDashboard(session) {
   loginPage.style.display = 'none';
   adminShell.classList.add('active');
+  currentAdminEmail = session.user.email;
   document.getElementById('adminEmailLabel').textContent = session.user.email;
 
   if (session.user.email === EMAIL_AUTORIZADO_CONFIG) {
@@ -203,6 +205,10 @@ async function abrirModal(id) {
   // Botão de baixar PDF
   modalCard.querySelector('#baixarPdfBtn').addEventListener('click', () => gerarPDF(inscricao));
 
+  // Botão de excluir (só existe no HTML se o admin autorizado estiver logado)
+  const excluirBtn = modalCard.querySelector('#excluirBtn');
+  if (excluirBtn) excluirBtn.addEventListener('click', () => excluirInscricao(inscricao));
+
   modalCard.querySelector('.modal-close').addEventListener('click', fecharModal);
 }
 
@@ -307,6 +313,16 @@ function renderModalConteudo(i) {
       <textarea class="admin-textarea" id="obsTextarea" placeholder="Adicione observações internas sobre esta inscrição...">${i.observacoes_admin || ''}</textarea>
       <button class="btn btn-secondary" id="salvarObsBtn" style="margin-top:10px;">Salvar observações</button>
     </div>
+
+    ${currentAdminEmail === EMAIL_AUTORIZADO_CONFIG ? `
+    <div class="detail-section" style="border-top:1px solid var(--danger-bg);padding-top:20px;margin-top:8px;">
+      <h4 style="color:var(--danger);">Zona de perigo</h4>
+      <p style="font-size:0.85rem;color:var(--gray-600);margin-bottom:12px;">
+        Excluir esta inscrição apaga permanentemente o registro e todos os documentos anexados. Essa ação não pode ser desfeita.
+      </p>
+      <button class="btn btn-danger" id="excluirBtn" type="button">🗑️ Excluir inscrição</button>
+    </div>
+    ` : ''}
   `;
 }
 
@@ -323,6 +339,44 @@ async function salvarObservacoes(id) {
   const { error } = await supabase.from('inscricoes').update({ observacoes_admin: texto }).eq('id', id);
   if (error) { showToast('Erro ao salvar observações: ' + error.message, 'error'); return; }
   showToast('Observações salvas!', 'success');
+  await carregarDados();
+}
+
+// ----------------------------------------------------------------------------
+// Excluir inscrição (somente EMAIL_AUTORIZADO_CONFIG — dupla confirmação)
+// ----------------------------------------------------------------------------
+async function excluirInscricao(i) {
+  const confirmacao1 = confirm(
+    `Tem certeza que deseja EXCLUIR permanentemente a inscrição ${i.protocolo} (${i.nome_completo})?\n\n` +
+    `Isso vai apagar o registro E todos os documentos anexados. Essa ação NÃO PODE ser desfeita.`
+  );
+  if (!confirmacao1) return;
+
+  const digitado = prompt(`Para confirmar, digite exatamente o protocolo desta inscrição:\n${i.protocolo}`);
+  if (digitado !== i.protocolo) {
+    showToast('Protocolo não confere. Exclusão cancelada.', 'error');
+    return;
+  }
+
+  // Monta a lista de todos os arquivos desta inscrição no Storage
+  const caminhos = DOCUMENTOS.map((d) => i[`${d.key}_path`]).filter(Boolean);
+
+  if (caminhos.length) {
+    const { error: storageError } = await supabase.storage.from(STORAGE_BUCKET).remove(caminhos);
+    if (storageError) {
+      showToast('Erro ao apagar documentos: ' + storageError.message, 'error');
+      return;
+    }
+  }
+
+  const { error } = await supabase.from('inscricoes').delete().eq('id', i.id);
+  if (error) {
+    showToast('Erro ao excluir inscrição: ' + error.message, 'error');
+    return;
+  }
+
+  showToast('Inscrição excluída permanentemente.', 'success');
+  fecharModal();
   await carregarDados();
 }
 
