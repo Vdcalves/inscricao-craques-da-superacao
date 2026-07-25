@@ -295,17 +295,21 @@
       </div>
     </div>
 
-    <!-- ETAPA 7: Declaração e envio -->
+    <!-- ETAPA 7: Termo de Adesão ao Regulamento -->
     <div class="form-card step" data-step="7" hidden>
       <span class="step-eyebrow">Etapa 7 de 7</span>
-      <h2>Declaração e Envio</h2>
-      <p class="step-desc">Revise os dados nas etapas anteriores antes de enviar. Após o envio, você receberá um número de protocolo.</p>
+      <h2>Termo de Adesão ao Regulamento</h2>
+      <p class="step-desc">Leia atentamente o regulamento abaixo antes de aceitar. Role a caixa para ver o conteúdo completo.</p>
+
+      <div class="termo-box" id="termoBox"></div>
+      <div class="termo-fade"></div>
+      <p class="termo-scroll-hint">↓ role para ler todas as seções ↓</p>
 
       <div class="declaracao-box">
         <input type="checkbox" id="declaracao" required>
-        <label for="declaracao">Declaro que todas as informações são verdadeiras e concordo com as normas do Projeto Craques da Superação.</label>
+        <label for="declaracao" id="declaracaoLabel"></label>
       </div>
-      <div class="error-msg" id="declaracaoError" style="margin-top:8px;">Você precisa aceitar a declaração para continuar.</div>
+      <div class="error-msg" id="declaracaoError" style="margin-top:8px;">Você precisa aceitar o Termo de Adesão para continuar.</div>
 
       <div class="form-nav" style="margin-top:28px;">
         <button type="button" class="btn btn-secondary" data-prev>← Voltar</button>

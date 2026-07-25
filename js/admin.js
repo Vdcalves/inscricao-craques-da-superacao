@@ -1,4 +1,5 @@
 import { supabase, STORAGE_BUCKET, formatDateBR, STATUS_LABELS, STATUS_COLORS } from './supabase-config.js';
+import { TERMO_TITULO, TERMO_SECOES, DECLARACAO_TEXT } from './termo-regulamento.js';
 
 const DOCUMENTOS = [
   { key: 'foto_aluno', label: 'Foto do aluno' },
@@ -200,6 +201,9 @@ async function abrirModal(id) {
   // Salvar observações
   modalCard.querySelector('#salvarObsBtn').addEventListener('click', () => salvarObservacoes(inscricao.id));
 
+  // Botão de baixar PDF
+  modalCard.querySelector('#baixarPdfBtn').addEventListener('click', () => gerarPDF(inscricao));
+
   modalCard.querySelector('.modal-close').addEventListener('click', fecharModal);
 }
 
@@ -222,7 +226,10 @@ function renderModalConteudo(i) {
         <div class="protocolo-tag">${i.protocolo}</div>
         <span class="status-badge ${STATUS_COLORS[i.status]}">${STATUS_LABELS[i.status]}</span>
       </div>
-      <button class="modal-close">✕</button>
+      <div style="display:flex;gap:10px;align-items:flex-start;">
+        <button class="btn btn-secondary" id="baixarPdfBtn" type="button">📄 Baixar PDF</button>
+        <button class="modal-close">✕</button>
+      </div>
     </div>
 
     <div class="detail-section">
@@ -386,6 +393,177 @@ siteConfigForm.addEventListener('submit', async (e) => {
   }
   showToast('Site atualizado com sucesso! As mudanças já estão no ar.', 'success');
 });
+
+// ----------------------------------------------------------------------------
+// Geração do PDF completo (dados da inscrição + Termo de Adesão aceito)
+// ----------------------------------------------------------------------------
+function gerarPDF(i) {
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({ unit: 'pt', format: 'a4' });
+  const pageW = doc.internal.pageSize.getWidth();
+  const pageH = doc.internal.pageSize.getHeight();
+  const marginX = 48;
+  const maxW = pageW - marginX * 2;
+  let y = 56;
+
+  const BLUE = [10, 37, 64];
+  const BLUE_LIGHT = [18, 62, 122];
+  const GREEN = [20, 140, 74];
+  const GRAY = [91, 107, 121];
+
+  function checkBreak(next = 18) {
+    if (y + next > pageH - 50) {
+      doc.addPage();
+      y = 56;
+    }
+  }
+  function heading(text) {
+    checkBreak(30);
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(13);
+    doc.setTextColor(...BLUE);
+    doc.text(text, marginX, y);
+    y += 10;
+    doc.setDrawColor(225, 232, 239);
+    doc.line(marginX, y, pageW - marginX, y);
+    y += 18;
+  }
+  function subheading(text) {
+    checkBreak(20);
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(10.5);
+    doc.setTextColor(...BLUE_LIGHT);
+    doc.text(text, marginX, y);
+    y += 15;
+  }
+  function fieldLine(label, value) {
+    checkBreak(15);
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(9.5);
+    doc.setTextColor(...GRAY);
+    doc.text(`${label}:`, marginX, y);
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(20, 32, 43);
+    doc.text(String(value || '-'), marginX + 140, y);
+    y += 15;
+  }
+  function paragraph(text, size = 9.5) {
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(size);
+    doc.setTextColor(20, 32, 43);
+    const lines = doc.splitTextToSize(text, maxW);
+    lines.forEach((line) => {
+      checkBreak(13);
+      doc.text(line, marginX, y);
+      y += 13;
+    });
+    y += 4;
+  }
+
+  // Cabeçalho
+  doc.setFillColor(...BLUE);
+  doc.rect(0, 0, pageW, 70, 'F');
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(15);
+  doc.setTextColor(255, 255, 255);
+  doc.text('Craques da Superação — Ficha de Inscrição', marginX, 32);
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(10);
+  doc.setTextColor(200, 215, 235);
+  doc.text('ONG Esportiva Infanto Juvenil Centro de Formação', marginX, 50);
+  y = 100;
+
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(12);
+  doc.setTextColor(...GREEN);
+  doc.text(`Protocolo: ${i.protocolo}`, marginX, y);
+  doc.setTextColor(...GRAY);
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(9.5);
+  doc.text(`Status: ${STATUS_LABELS[i.status]}   |   Enviado em: ${formatDateBR(i.created_at?.slice(0, 10))}`, marginX, y + 15);
+  y += 34;
+
+  heading('Dados do Participante');
+  fieldLine('Nome completo', i.nome_completo);
+  fieldLine('Data de nascimento', formatDateBR(i.data_nascimento));
+  fieldLine('Sexo', i.sexo);
+  fieldLine('CPF', i.cpf);
+  fieldLine('RG', i.rg);
+  fieldLine('Certidão de nascimento', i.certidao_nascimento_numero);
+  fieldLine('Escola', i.escola);
+  fieldLine('Série', i.serie);
+  y += 8;
+
+  heading('Filiação e Responsável');
+  fieldLine('Nome da mãe', i.nome_mae);
+  fieldLine('Nome do pai', i.nome_pai);
+  fieldLine('Responsável legal', i.responsavel_legal);
+  fieldLine('CPF do responsável', i.cpf_responsavel);
+  fieldLine('Telefone', i.telefone);
+  fieldLine('WhatsApp', i.whatsapp);
+  fieldLine('Email', i.email);
+  y += 8;
+
+  heading('Endereço');
+  fieldLine('Endereço', i.endereco);
+  fieldLine('CEP', i.cep);
+  fieldLine('Cidade / Estado', `${i.cidade} / ${i.estado}`);
+  y += 8;
+
+  heading('Saúde');
+  fieldLine('Necessidade especial', i.necessidade_especial || 'Nenhuma');
+  fieldLine('Alergias', i.alergias || 'Nenhuma');
+  fieldLine('Medicamentos', i.medicamentos || 'Nenhum');
+  if (i.observacoes) fieldLine('Observações', i.observacoes);
+  y += 8;
+
+  heading('Uniformes');
+  fieldLine('Camisa', i.uniforme_camisa);
+  fieldLine('Calção', i.uniforme_calcao);
+  fieldLine('Calçado', i.uniforme_calcado);
+
+  // --- Página do Termo de Adesão ---
+  doc.addPage();
+  y = 56;
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(15);
+  doc.setTextColor(...BLUE);
+  doc.text(TERMO_TITULO, marginX, y);
+  y += 26;
+
+  TERMO_SECOES.forEach((secao) => {
+    subheading(secao.titulo);
+    secao.paragrafos.forEach((par) => paragraph(par));
+    y += 4;
+  });
+
+  // Bloco de aceite
+  checkBreak(70);
+  doc.setFillColor(232, 248, 238);
+  doc.setDrawColor(...GREEN);
+  const boxY = y;
+  const declaracaoLines = doc.splitTextToSize(DECLARACAO_TEXT, maxW - 24);
+  const boxH = 34 + declaracaoLines.length * 12;
+  doc.roundedRect(marginX, boxY, maxW, boxH, 4, 4, 'FD');
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(9.5);
+  doc.setTextColor(...GREEN);
+  doc.text('✓ Termo aceito pelo responsável', marginX + 12, boxY + 18);
+  doc.setFont('helvetica', 'normal');
+  doc.setTextColor(20, 32, 43);
+  doc.setFontSize(9);
+  let ty = boxY + 34;
+  declaracaoLines.forEach((line) => { doc.text(line, marginX + 12, ty); ty += 12; });
+  y = boxY + boxH + 16;
+
+  checkBreak(15);
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(9);
+  doc.setTextColor(...GRAY);
+  doc.text(`Data e hora do aceite (envio da inscrição): ${new Date(i.created_at).toLocaleString('pt-BR')}`, marginX, y);
+
+  doc.save(`inscricao-${i.protocolo}.pdf`);
+}
 
 // ----------------------------------------------------------------------------
 // Toast simples

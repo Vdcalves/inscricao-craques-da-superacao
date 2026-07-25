@@ -41,7 +41,7 @@ create table if not exists public.inscricoes (
   updated_at timestamptz not null default now(),
 
   status text not null default 'recebida'
-    check (status in ('recebida', 'em_analise', 'aprovada', 'reprovada')),
+    check (status in ('recebida', 'em_analise', 'aprovada', 'reserva', 'reprovada')),
   observacoes_admin text,
 
   -- Dados do participante
@@ -78,17 +78,22 @@ create table if not exists public.inscricoes (
   -- Declaração
   declaracao_aceita boolean not null default false,
 
+  -- Uniformes
+  uniforme_camisa text,
+  uniforme_calcao text,
+  uniforme_calcado text,
+
   -- Caminhos dos arquivos no Supabase Storage (bucket "documentos")
   foto_aluno_path text not null,
   doc_rg_participante_path text not null,
   doc_cpf_participante_path text not null,
   doc_rg_responsavel_path text not null,
   doc_cpf_responsavel_path text not null,
-  doc_certidao_nascimento_path text not null,
   doc_comprovante_residencia_path text not null,
   doc_boletim_escolar_path text not null,
   doc_exame_cardiologico_path text not null,
   doc_atestado_cardiologista_path text not null,
+  doc_atestado_aptidao_path text not null,
   doc_exame_sangue_path text not null,
   doc_carta_assinada_path text not null,
   doc_foto_3x4_path text not null,

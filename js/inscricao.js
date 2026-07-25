@@ -1,4 +1,5 @@
 import { supabase, STORAGE_BUCKET, maskCPF, maskPhone, maskCEP, isValidCPF, buscarCEP } from './supabase-config.js';
+import { TERMO_SECOES, DECLARACAO_TEXT } from './termo-regulamento.js';
 
 // ----------------------------------------------------------------------------
 // Lista de documentos obrigatórios (chave = coluna no banco / pasta no storage)
@@ -83,6 +84,16 @@ fotoAlunoInput.addEventListener('change', () => {
   reader.onload = (e) => { photoPreview.innerHTML = `<img src="${e.target.result}" alt="Foto do aluno">`; };
   reader.readAsDataURL(file);
 });
+
+// ----------------------------------------------------------------------------
+// Preenche a caixa do Termo de Adesão e o texto de aceite
+// ----------------------------------------------------------------------------
+const termoBox = document.getElementById('termoBox');
+termoBox.innerHTML = TERMO_SECOES.map((secao) => `
+  <h3>${secao.titulo}</h3>
+  ${secao.paragrafos.map((par) => `<p>${par}</p>`).join('')}
+`).join('');
+document.getElementById('declaracaoLabel').textContent = DECLARACAO_TEXT;
 
 // ----------------------------------------------------------------------------
 // Máscaras de campos

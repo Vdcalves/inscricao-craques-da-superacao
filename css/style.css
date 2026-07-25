@@ -588,6 +588,28 @@ p { line-height: 1.6; }
 
 .form-nav { display: flex; justify-content: space-between; gap: 14px; margin-top: 8px; }
 
+/* Caixa de rolagem do Termo de Adesão */
+.termo-box {
+  max-height: 340px;
+  overflow-y: auto;
+  border: 1.5px solid var(--gray-200);
+  border-radius: var(--radius-md);
+  padding: 22px 26px;
+  margin-bottom: 20px;
+  background: var(--gray-50);
+}
+.termo-box h3 { font-size: 0.98rem; color: var(--blue-700); margin: 18px 0 6px; }
+.termo-box h3:first-child { margin-top: 0; }
+.termo-box p { font-size: 0.86rem; color: var(--gray-800); margin: 0 0 10px; line-height: 1.6; }
+.termo-fade {
+  position: relative;
+  margin-top: -44px;
+  height: 44px;
+  background: linear-gradient(to bottom, rgba(246,249,252,0), var(--gray-50));
+  pointer-events: none;
+}
+.termo-scroll-hint { text-align: center; color: var(--gray-500); font-size: 0.78rem; margin: -12px 0 16px; }
+
 /* Barra de progresso de upload no envio */
 .upload-progress-overlay {
   position: fixed; inset: 0; background: rgba(10,37,64,0.72);
