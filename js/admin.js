@@ -13,7 +13,6 @@ const DOCUMENTOS = [
   { key: 'doc_atestado_cardiologista', label: 'Atestado do cardiologista' },
   { key: 'doc_atestado_aptidao', label: 'Atestado médico de aptidão física' },
   { key: 'doc_exame_sangue', label: 'Exame de sangue' },
-  { key: 'doc_carta_assinada', label: 'Carta assinada' },
   { key: 'doc_foto_3x4', label: 'Foto 3x4' },
 ];
 
