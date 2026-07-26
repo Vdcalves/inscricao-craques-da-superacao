@@ -230,12 +230,17 @@ function setUploadProgress(pct, text) {
   if (text) uploadStatusText.textContent = text;
 }
 
+// CORREÇÃO: upsert: false — como cada inscrição usa um pastaId novo
+// (crypto.randomUUID()), nunca existe conflito de nome, e "upsert: true"
+// forçava uma checagem de SELECT em storage.objects (para decidir entre
+// inserir ou atualizar) que era barrada por RLS, pois só havia policy de
+// INSERT para o público, sem policy de SELECT correspondente.
 async function uploadArquivo(file, pastaId, nomeCampo) {
   const ext = file.name.split('.').pop();
   const path = `${pastaId}/${nomeCampo}.${ext}`;
   const { error } = await supabase.storage.from(STORAGE_BUCKET).upload(path, file, {
     cacheControl: '3600',
-    upsert: true,
+    upsert: false,
   });
   if (error) throw new Error(`Falha ao enviar "${nomeCampo}": ${error.message}`);
   return path;
