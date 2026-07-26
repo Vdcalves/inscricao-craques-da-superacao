@@ -15,7 +15,6 @@ const DOCUMENTOS = [
   { key: 'doc_atestado_cardiologista', label: 'Atestado do cardiologista', icon: '🩺' },
   { key: 'doc_atestado_aptidao', label: 'Atestado médico de aptidão física', icon: '📋' },
   { key: 'doc_exame_sangue', label: 'Exame de sangue', icon: '🩸' },
-  { key: 'doc_foto_3x4', label: 'Foto 3x4', icon: '📷' },
 ];
 
 const state = {
