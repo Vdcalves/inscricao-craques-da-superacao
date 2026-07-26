@@ -305,11 +305,11 @@ form.addEventListener('submit', async (e) => {
       ...documentPaths,
     };
 
-    const { data, error } = await supabase
-      .from('inscricoes')
-      .insert(payload)
-      .select('protocolo')
-      .single();
+    // Envia via função RPC (criar_inscricao) em vez de insert direto,
+    // pois o insert direto exigia SELECT de volta (RETURNING), e a policy
+    // de SELECT é restrita a admins autenticados — a função contorna isso
+    // com segurança, retornando só o protocolo gerado.
+    const { data: protocolo, error } = await supabase.rpc('criar_inscricao', { dados: payload });
 
     if (error) throw new Error(error.message);
 
@@ -318,7 +318,7 @@ form.addEventListener('submit', async (e) => {
       overlay.hidden = true;
       form.hidden = true;
       document.getElementById('successScreen').hidden = false;
-      document.getElementById('protocoloValue').textContent = data.protocolo;
+      document.getElementById('protocoloValue').textContent = protocolo;
     }, 500);
 
   } catch (err) {
