@@ -678,6 +678,9 @@ p { line-height: 1.6; }
   padding: 12px 14px; border-radius: var(--radius-sm); margin-bottom: 16px; display: none;
 }
 .admin-error.show { display: block; }
+.admin-link-row { text-align: center; margin-top: 16px; font-size: 0.85rem; }
+.admin-link-row a { color: var(--blue-700); font-weight: 600; text-decoration: none; cursor: pointer; }
+.admin-link-row a:hover { text-decoration: underline; }
 
 .admin-shell { display: none; min-height: 100vh; }
 .admin-shell.active { display: flex; }
