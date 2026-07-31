@@ -50,8 +50,15 @@ function showDashboard(session) {
   currentAdminEmail = session.user.email;
   document.getElementById('adminEmailLabel').textContent = session.user.email;
 
-  if (session.user.email === EMAIL_AUTORIZADO_CONFIG) {
-    document.getElementById('navSiteConfig').hidden = false;
+  // Sempre define os dois estados (não só "mostrar"), pra não ficar um
+  // resquício visível se o usuário trocar de conta sem recarregar a página.
+  const ehAdminAutorizado = session.user.email === EMAIL_AUTORIZADO_CONFIG;
+  document.getElementById('navSiteConfig').hidden = !ehAdminAutorizado;
+
+  // Se quem está logado não é o admin autorizado e a aba "Configurações do
+  // Site" ficou aberta de uma sessão anterior, volta pro Dashboard.
+  if (!ehAdminAutorizado && viewSiteConfig && !viewSiteConfig.hidden) {
+    navDashboard.click();
   }
 
   carregarDados();
