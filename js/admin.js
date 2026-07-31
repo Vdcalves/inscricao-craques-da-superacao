@@ -42,6 +42,7 @@ async function checkSession() {
 function showLogin() {
   loginPage.style.display = 'flex';
   adminShell.classList.remove('active');
+  mostrarTelaLogin();
 }
 
 function showDashboard(session) {
@@ -64,7 +65,14 @@ function showDashboard(session) {
   carregarDados();
 }
 
-supabase.auth.onAuthStateChange((_event, session) => {
+supabase.auth.onAuthStateChange((event, session) => {
+  // Quando o usuário clica no link de redefinição recebido por email, o
+  // Supabase cria uma sessão temporária e dispara este evento — nesse caso
+  // mostramos o formulário de "nova senha" em vez de entrar direto no painel.
+  if (event === 'PASSWORD_RECOVERY') {
+    showResetPasswordForm();
+    return;
+  }
   if (session) showDashboard(session); else showLogin();
 });
 
@@ -102,6 +110,99 @@ loginForm.addEventListener('submit', async (e) => {
 document.getElementById('logoutBtn').addEventListener('click', async () => {
   await supabase.auth.signOut();
   showLogin();
+});
+
+// ----------------------------------------------------------------------------
+// ESQUECI MINHA SENHA
+// ----------------------------------------------------------------------------
+const forgotForm = document.getElementById('forgotForm');
+const forgotBtn = document.getElementById('forgotBtn');
+const resetPasswordForm = document.getElementById('resetPasswordForm');
+const resetPasswordBtn = document.getElementById('resetPasswordBtn');
+
+function mostrarTelaLogin() {
+  loginForm.hidden = false;
+  forgotForm.hidden = true;
+  resetPasswordForm.hidden = true;
+  loginError.classList.remove('show');
+}
+
+function mostrarTelaEsqueciSenha() {
+  loginForm.hidden = true;
+  forgotForm.hidden = false;
+  resetPasswordForm.hidden = true;
+  loginError.classList.remove('show');
+}
+
+function showResetPasswordForm() {
+  showLogin(); // garante que a admin-login-page está visível (caso o link chegue sem sessão anterior)
+  loginForm.hidden = true;
+  forgotForm.hidden = true;
+  resetPasswordForm.hidden = false;
+}
+
+document.getElementById('showForgotLink').addEventListener('click', (e) => {
+  e.preventDefault();
+  mostrarTelaEsqueciSenha();
+});
+
+document.getElementById('backToLoginLink').addEventListener('click', (e) => {
+  e.preventDefault();
+  mostrarTelaLogin();
+});
+
+forgotForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const email = document.getElementById('forgotEmail').value.trim();
+
+  forgotBtn.disabled = true;
+  forgotBtn.innerHTML = '<span class="loader"></span>';
+
+  const { error } = await supabase.auth.resetPasswordForEmail(email, {
+    redirectTo: `${window.location.origin}/admin`,
+  });
+
+  forgotBtn.disabled = false;
+  forgotBtn.textContent = 'Enviar link de redefinição';
+
+  // Por segurança, o Supabase não informa se o email existe ou não — a
+  // mensagem é sempre a mesma, exista ou não a conta com esse email.
+  if (error) {
+    showToast('Não foi possível enviar o email agora. Tente de novo em instantes.', 'error');
+    return;
+  }
+  showToast('Se esse email tiver uma conta, enviamos um link de redefinição. Confira sua caixa de entrada (e o spam).', 'success');
+  forgotForm.reset();
+  mostrarTelaLogin();
+});
+
+resetPasswordForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const senha1 = document.getElementById('resetPassword1').value;
+  const senha2 = document.getElementById('resetPassword2').value;
+
+  if (senha1 !== senha2) {
+    showToast('As senhas não são iguais.', 'error');
+    return;
+  }
+
+  resetPasswordBtn.disabled = true;
+  resetPasswordBtn.innerHTML = '<span class="loader"></span>';
+
+  const { error } = await supabase.auth.updateUser({ password: senha1 });
+
+  resetPasswordBtn.disabled = false;
+  resetPasswordBtn.textContent = 'Salvar nova senha';
+
+  if (error) {
+    showToast('Não foi possível salvar a nova senha: ' + error.message, 'error');
+    return;
+  }
+
+  showToast('Senha atualizada com sucesso! Você já está logado.', 'success');
+  resetPasswordForm.reset();
+  const { data: { session } } = await supabase.auth.getSession();
+  if (session) showDashboard(session);
 });
 
 // ----------------------------------------------------------------------------
