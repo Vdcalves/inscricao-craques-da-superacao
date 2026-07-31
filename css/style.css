@@ -695,6 +695,7 @@ p { line-height: 1.6; }
   margin-bottom: 6px; cursor: pointer; transition: background 0.2s;
 }
 .admin-nav-item:hover, .admin-nav-item.active { background: rgba(255,255,255,0.1); color: var(--white); }
+.admin-nav-item[hidden] { display: none !important; }
 .admin-sidebar .logout-btn { margin-top: auto; }
 
 .admin-main { flex: 1; padding: 36px 40px; max-width: calc(100vw - 240px); }
