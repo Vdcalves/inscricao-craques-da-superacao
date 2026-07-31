@@ -19,6 +19,7 @@
 
     <div class="admin-error" id="loginError">Email ou senha inválidos.</div>
 
+    <!-- FORM: LOGIN -->
     <form id="loginForm">
       <div class="field">
         <label>Email</label>
@@ -29,6 +30,36 @@
         <input type="password" id="loginPassword" required autocomplete="current-password">
       </div>
       <button type="submit" class="btn btn-primary btn-block" id="loginBtn">Entrar</button>
+      <p class="admin-link-row"><a href="#" id="showForgotLink">Esqueci minha senha</a></p>
+    </form>
+
+    <!-- FORM: PEDIR LINK DE REDEFINIÇÃO -->
+    <form id="forgotForm" hidden>
+      <p class="sub" style="margin-bottom:20px;text-align:left;">
+        Digite o email da sua conta de admin. Vamos te mandar um link para você criar uma senha nova.
+      </p>
+      <div class="field">
+        <label>Email</label>
+        <input type="email" id="forgotEmail" required autocomplete="username">
+      </div>
+      <button type="submit" class="btn btn-primary btn-block" id="forgotBtn">Enviar link de redefinição</button>
+      <p class="admin-link-row"><a href="#" id="backToLoginLink">Voltar para o login</a></p>
+    </form>
+
+    <!-- FORM: DEFINIR NOVA SENHA (aberto a partir do link do email) -->
+    <form id="resetPasswordForm" hidden>
+      <p class="sub" style="margin-bottom:20px;text-align:left;">
+        Crie uma senha nova para sua conta.
+      </p>
+      <div class="field">
+        <label>Nova senha</label>
+        <input type="password" id="resetPassword1" required minlength="6" autocomplete="new-password">
+      </div>
+      <div class="field">
+        <label>Confirmar nova senha</label>
+        <input type="password" id="resetPassword2" required minlength="6" autocomplete="new-password">
+      </div>
+      <button type="submit" class="btn btn-primary btn-block" id="resetPasswordBtn">Salvar nova senha</button>
     </form>
   </div>
 </div>
@@ -209,6 +240,6 @@
 
 <div id="toastRoot"></div>
 
-<script src="js/admin.js?v=20260731" type="module"></script>
+<script src="js/admin.js?v=20260731b" type="module"></script>
 </body>
 </html>
